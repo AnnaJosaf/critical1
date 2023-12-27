@@ -1,0 +1,30 @@
+name: Critical Issue Altert
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Linter
+        run: ./lint.sh
+
+      - name: Notify on Critical Issue
+        if: ${{ failure() }}
+        run: |
+          echo "Critical issues found! Please check the code."
